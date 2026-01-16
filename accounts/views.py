@@ -21,6 +21,7 @@ def login(request):
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
     return render(request, 'accounts/login.html')
+from django.contrib.auth import login
 
 def register(request):
     if request.method == 'POST':
@@ -35,23 +36,33 @@ def register(request):
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'Username already exists!')
                 return redirect('register')
-            else:
-                if User.objects.filter(email=email).exists():
-                    messages.error(request, 'Email already exists!')
-                    return redirect('register')
-                else:
-                    user = User.objects.create_user(first_name=firstname, last_name=lastname, email=email, username=username, password=password)
-                    auth.login(request, user)
-                    messages.success(request, 'You are now logged in.')
-                    return redirect('dashboard')
-                    user.save()
-                    messages.success(request, 'You are registered successfully.')
-                    return redirect('login')
+
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists!')
+                return redirect('register')
+
+            user = User.objects.create_user(
+                first_name=firstname,
+                last_name=lastname,
+                username=username,
+                email=email,
+                password=password
+            )
+
+            login(
+                request,
+                user,
+                backend="django.contrib.auth.backends.ModelBackend"
+            )
+
+            messages.success(request, 'You are now logged in.')
+            return redirect('dashboard')
+
         else:
-            messages.error(request, 'Password do not match')
+            messages.error(request, 'Passwords do not match')
             return redirect('register')
-    else:
-        return render(request, 'accounts/register.html')
+
+    return render(request, 'accounts/register.html')
 
 
 @login_required(login_url = 'login')
