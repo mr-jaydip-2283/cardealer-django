@@ -29,6 +29,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '934nw3r62@!m0^ksgw3#31tntglnr%
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '198.211.99.20,localhost,127.0.0.1').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', 'http://198.211.99.20,http://localhost,http://127.0.0.1,https://localhost,https://127.0.0.1').split(',')
 
 LOGIN_REDIRECT_URL = 'dashboard'
 
