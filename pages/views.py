@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Team
+from .models import Team, ContactMessage
 from cars.models import Car
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -48,12 +48,24 @@ def contact(request):
         email_subject = 'You have a new message from CarDealer Website regarding ' + subject
         message_body = 'Name: ' + name + '. Email: ' + email + '. Phone: ' + phone + '. Message: ' + message
 
-        admin_info = User.objects.get(is_superuser=True)
-        admin_email = admin_info.email
-        send_mail(
+        # Save to database
+        contact_message = ContactMessage(
+            name=name,
+            email=email,
+            subject=subject,
+            phone=phone,
+            message=message
+        )
+        contact_message.save()
+
+        # Fix: handle multiple superusers or no superuser
+        admin_info = User.objects.filter(is_superuser=True).first()
+        if admin_info:
+            admin_email = admin_info.email
+            send_mail(
                 email_subject,
                 message_body,
-                'rathan.kumar049@gmail.com',
+                'rathan.kumar049@gmail.com',  # default from-email or verified sender
                 [admin_email],
                 fail_silently=False,
             )

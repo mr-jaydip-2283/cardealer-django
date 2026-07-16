@@ -14,3 +14,14 @@ class Team(models.Model):
 
     def __str__(self):
         return self.first_name
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    subject = models.CharField(max_length=255)
+    phone = models.CharField(max_length=100, blank=True)
+    message = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.subject}"

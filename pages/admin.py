@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Team
+from .models import Team, ContactMessage
 from django.utils.html import format_html
 
 # Register your models here.
@@ -15,4 +15,11 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'designation')
     list_filter = ('designation',)
 
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'email', 'subject', 'phone', 'created_date')
+    list_display_links = ('id', 'name',)
+    search_fields = ('name', 'email', 'subject', 'message')
+    list_filter = ('created_date',)
+
 admin.site.register(Team, TeamAdmin)
+admin.site.register(ContactMessage, ContactMessageAdmin)
