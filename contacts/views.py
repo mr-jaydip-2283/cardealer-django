@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from .models import Contact
+from django.conf import settings
 
 
 def inquiry(request):
@@ -48,7 +49,7 @@ def inquiry(request):
             send_mail(
                 'New Car Inquiry',
                 f'You have a new inquiry for the car {car_title}. Please login to your admin panel for more info.',
-                'jaydipdandwate2283@gmail.com',  # replace with your verified sender email
+                settings.DEFAULT_FROM_EMAIL,
                 [admin_email],
                 fail_silently=False,
             )
